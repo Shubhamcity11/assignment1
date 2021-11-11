@@ -12,7 +12,13 @@ const config = {
         }
     },
     'prod':{
-
+        'db': {
+            host: process.env.PROD_HOST,
+            port: process.env.PROD_PORT,
+            dbname: process.env.PROD_DBNAME,
+            user: process.env.PROD_USER,
+            pass: process.env.PROD_PASS,
+        }
     }
 }
 

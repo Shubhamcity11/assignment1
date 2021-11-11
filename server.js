@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express    = require('express'),
       app        = express();
-      port       = 3000 || process.env.port,
+      port       = process.env.port || 3000,
       morgan     = require('morgan'),
       db         = require("./db"),
       country      = require("./models/country"),
@@ -25,15 +25,14 @@ app.use((err, req, res, next) => {
 })
 
 async function loadCsvIntoDb(){
-    let countries = readCSV("./data/countries.csv")
-    let languages = readCSV("./data/languages.csv")
-    for(let c of countries){
-        expandLanguage(c, languages)
-    }
-
     try{
         let count = await country.count();
         if(count == 0){
+            let countries = readCSV("./data/countries.csv")
+            let languages = readCSV("./data/languages.csv")
+            for(let c of countries){
+               expandLanguage(c, languages)
+            }
             await country.bulkCreate(countries)
         }       
     }
