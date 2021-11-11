@@ -5,6 +5,12 @@ const Sequelize = require('sequelize');
     host: db.host,
     port: db.port,
     dialect: 'postgres',
+//     dialectOptions: {  for heroku posgres
+//         ssl: {
+//             require: true, 
+//             rejectUnauthorized: false 
+//         }
+//     },
     logging: false
 });
 
