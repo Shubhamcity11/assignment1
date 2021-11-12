@@ -49,3 +49,53 @@ exports.expandLanguage = (obj, languages) => {
     }
     obj.languages = JSON.stringify(obj.languages)
 }
+
+//load the data from csv file in database
+async function loadCsvIntoDb(){
+    try{
+        let count = await country.count();
+        if(count == 0){
+
+            let countries = readCSV("./data/countries.csv") // returns [countries]
+            let languages = readCSV("./data/languages.csv")// returns [languages] 
+            for(let c of countries){
+                /*
+                    intially structure of country = {
+                        name:,
+                        native:,
+                        capital:,
+                        currency,
+                        continent,
+                        languages: "a, b"
+                    }
+
+                    after populating language the structure becomes
+                    country {
+                        name:,
+                        native:,
+                        cuurency:,
+                        continent:
+                        language: [
+                            {
+                                code: a,
+                                name: 
+                            },
+                            {
+                                code: b,
+                                name: .
+                            }
+                        ]
+                    }
+
+                */
+               expandLanguage(c, languages)
+            }
+
+            //storing all the entries in the database
+            await country.bulkCreate(countries)
+        }       
+    }
+    catch(err) {
+        console.log(err);
+    }
+}

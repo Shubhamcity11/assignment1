@@ -6,7 +6,7 @@ const express    = require('express'),
       db         = require("./db"),
       country      = require("./models/country"),
       countryRoutes = require("./routes/country"),
-{readCSV, expandLanguage} = require("./utils/helpers");
+{loadCsvIntoDb} = require("./utils/helpers");
 
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -24,27 +24,12 @@ app.use((err, req, res, next) => {
     })
 })
 
-async function loadCsvIntoDb(){
-    try{
-        let count = await country.count();
-        if(count == 0){
-            let countries = readCSV("./data/countries.csv")
-            let languages = readCSV("./data/languages.csv")
-            for(let c of countries){
-               expandLanguage(c, languages)
-            }
-            await country.bulkCreate(countries)
-        }       
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-
 db.sync().then(() => {
     console.log("Connected to the database")
     app.listen(port, async () => {
         console.log('Server started on port: ' + port);
+
+        //adding the data as soon as server starts
         loadCsvIntoDb().then(() => console.log("Data Loaded Succesfully"))
     })
 })

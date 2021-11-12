@@ -3,6 +3,8 @@ let router = express.Router();
 let country = require("../models/country");
 const { createError } = require("../utils/helpers");
 
+
+//returns the data for the country code
 router.post("/country", async (req, res, next) => {
     try{
         let code = req.body.country;
@@ -26,7 +28,6 @@ router.post("/country", async (req, res, next) => {
     catch(err){
         next(err);
     }
-    
 })
 
 module.exports = router;
