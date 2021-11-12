@@ -51,7 +51,7 @@ exports.expandLanguage = (obj, languages) => {
 }
 
 //load the data from csv file in database
-async function loadCsvIntoDb(){
+exports.loadCsvIntoDb = async() => {
     try{
         let count = await country.count();
         if(count == 0){
